@@ -27,6 +27,44 @@ class Address(Base):
 
     def to_dict(self):
         return {}
+    
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    user_name = Column(String(250), nullable=False)
+    first_name = Column(String(250), nullable=False)
+    last_name = Column(String(250), nullable=False)
+    email = Column(String(250), nullable=False)
+
+class Post(Base):
+    __tablename__ = 'post'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+
+class Media(Base):
+    __tablename__ = 'media'
+    id = Column(Integer, primary_key=True)
+    type = Column(String(250), nullable=False)
+    url = Column(String(250), nullable=False)
+    post_id = Column(Integer,ForeignKey('post.id'))
+    post = relationship(Post)
+
+class Comment(Base):
+    __tablename__ = 'comment'
+    id = Column(Integer, primary_key=True)
+    text = Column(String(250), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+    post_id = Column(Integer, ForeignKey('post.id'))
+    post = relationship(Post)
+
+class Followers(Base):
+    __tablename__ = 'followers'
+    id = Column(Integer,primary_key=True)
+    user_from_id = Column(Integer,ForeignKey('user.id'))
+    user_to_id = Column(Integer,ForeignKey('user.id'))
+    user = relationship(User)
 
 ## Draw from SQLAlchemy base
 try:
